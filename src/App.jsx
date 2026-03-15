@@ -1,5 +1,5 @@
 import React, { Suspense, lazy } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 
 // Layout Components
@@ -22,17 +22,19 @@ function App() {
     <div className="min-h-screen bg-background text-foreground flex flex-col items-center">
       {/* Mobile Container Emulator */}
       <main className="w-full max-w-[480px] min-h-screen bg-background relative flex flex-col shadow-2xl border-x border-white/5">
-        <AnimatePresence mode="wait">
-          <Suspense fallback={<div className="flex h-screen items-center justify-center">Loading...</div>}>
+        <Suspense fallback={<div className="flex h-screen items-center justify-center bg-background text-primary font-bold animate-pulse">Loading...</div>}>
+          <AnimatePresence mode="wait">
             <Routes location={location} key={location.pathname}>
               <Route path="/" element={<Home />} />
               <Route path="/discover" element={<Discover />} />
               <Route path="/library" element={<Library />} />
               <Route path="/manga/:id" element={<MangaDetail />} />
-              <Route path="/reader/:id/:chapter" element={<Reader />} />
+              <Route path="/reader/:id" element={<Reader />} />
+              {/* Fallback to Home for unknown routes */}
+              <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
-          </Suspense>
-        </AnimatePresence>
+          </AnimatePresence>
+        </Suspense>
 
         {!isReaderPage && <BottomNav />}
         

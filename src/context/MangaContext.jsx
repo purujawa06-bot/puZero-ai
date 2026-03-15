@@ -6,13 +6,23 @@ const API_BASE_URL = 'https://www.puruboy.kozow.com/api/anime/komiku';
 
 export const MangaProvider = ({ children }) => {
   const [favorites, setFavorites] = useState(() => {
-    const saved = localStorage.getItem('manga_favorites');
-    return saved ? JSON.parse(saved) : [];
+    try {
+      const saved = localStorage.getItem('manga_favorites');
+      return saved ? JSON.parse(saved) : [];
+    } catch (e) {
+      console.error("Failed to parse favorites from localStorage", e);
+      return [];
+    }
   });
 
   const [history, setHistory] = useState(() => {
-    const saved = localStorage.getItem('manga_history');
-    return saved ? JSON.parse(saved) : [];
+    try {
+      const saved = localStorage.getItem('manga_history');
+      return saved ? JSON.parse(saved) : [];
+    } catch (e) {
+      console.error("Failed to parse history from localStorage", e);
+      return [];
+    }
   });
 
   useEffect(() => {
