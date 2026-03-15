@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= chapter.title %> - PuruManga</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #050505; }
+        .manga-image { min-height: 400px; background-color: #1a1a1a; }
+    </style>
+</head>
+<body class="text-gray-200">
+    <!-- Floating Header -->
+    <nav class="bg-gray-900/80 backdrop-blur-md border-b border-gray-800 sticky top-0 z-50">
+        <div class="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
+            <button onclick="history.back()" class="p-2 hover:bg-gray-800 rounded-full transition-colors text-blue-400">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+            </button>
+            <h1 class="text-sm md:text-base font-bold text-center flex-1 px-4 truncate">
+                <%= chapter.title %>
+            </h1>
+            <div class="w-10"></div> <!-- Spacer for balance -->
+        </div>
+    </nav>
+
+    <!-- Images Container -->
+    <main class="max-w-3xl mx-auto">
+        <div class="flex flex-col items-center">
+            <% chapter.images.forEach(img => { %>
+                <img src="<%= img.url %>" 
+                     alt="<%= img.alt %>" 
+                     class="w-full h-auto manga-image"
+                     loading="lazy"
+                     onerror="this.src='https://placehold.co/600x800?text=Gambar+Gagal+Dimuat'">
+            <% }) %>
+        </div>
+
+        <!-- Navigation Bottom -->
+        <div class="py-12 px-4 text-center">
+            <p class="text-gray-500 mb-6 italic">Anda telah mencapai akhir chapter.</p>
+            <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" 
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full font-bold transition-all shadow-lg shadow-blue-900/20">
+                Kembali ke Atas
+            </button>
+            <div class="mt-8">
+                <button onclick="history.back()" class="text-gray-400 hover:text-white transition-colors">
+                    Kembali ke Daftar Chapter
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-black py-8 text-center text-gray-700 text-xs">
+        <p>PuruManga Reader Engine v1.0</p>
+    </footer>
+
+    <!-- Prevent right click to somewhat mimic reader experience -->
+    <script>
+        document.addEventListener('contextmenu', event => event.preventDefault());
+    </script>
+</body>
+</html>

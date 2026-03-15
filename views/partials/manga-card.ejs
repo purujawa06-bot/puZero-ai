@@ -1,0 +1,16 @@
+<div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg transition-transform hover:scale-105 border border-gray-700">
+    <a href="/detail?url=<%= encodeURIComponent(manga.originalLink) %>">
+        <div class="relative">
+            <img src="<%= manga.thumbnail %>" alt="<%= manga.title %>" class="w-full h-64 object-cover" loading="lazy">
+            <span class="absolute top-2 left-2 bg-blue-600 text-white text-[10px] px-2 py-1 rounded uppercase font-bold">
+                <%= manga.type %>
+            </span>
+        </div>
+        <div class="p-3">
+            <h3 class="text-white font-semibold text-sm line-clamp-2 h-10"><%= manga.title %></h3>
+            <p class="text-gray-400 text-xs mt-2 flex justify-between items-center">
+                <span><%= manga.update_info || manga.chapter || 'Detail' %></span>
+            </p>
+        </div>
+    </a>
+</div>
