@@ -19,16 +19,16 @@ app.post('/chat', async (req, res) => {
     const userPrompt = req.body.prompt;
     
     if (!userPrompt) {
-        return res.send('&lt;div class="text-red-500"&gt;Pesan tidak boleh kosong.&lt;/div&gt;');
+        return res.send('<div class="text-red-500">Pesan tidak boleh kosong.</div>');
     }
 
-    // Tampilkan pesan user segera
+    // Template pesan user
     const userBubble = `
-        &lt;div class="flex justify-end mb-4"&gt;
-            &lt;div class="bg-blue-600 text-white p-3 rounded-2xl rounded-tr-none max-w-[80%] shadow-sm"&gt;
+        <div class="flex justify-end mb-4">
+            <div class="bg-blue-600 text-white p-3 rounded-2xl rounded-tr-none max-w-[80%] shadow-sm">
                 ${userPrompt}
-            &lt;/div&gt;
-        &lt;/div&gt;
+            </div>
+        </div>
     `;
 
     try {
@@ -39,21 +39,30 @@ app.post('/chat', async (req, res) => {
         });
 
         const data = await response.json();
-        const aiResponse = data.message || data.response || JSON.stringify(data);
+        
+        // Memperbaiki ekstraksi jawaban dari struktur JSON API
+        let aiText = "";
+        if (data.result && data.result.answer) {
+            aiText = data.result.answer;
+        } else if (data.message) {
+            aiText = data.message;
+        } else {
+            aiText = "Maaf, saya tidak mendapatkan jawaban yang valid.";
+        }
 
         const aiBubble = `
-            &lt;div class="flex justify-start mb-4 animate-in fade-in slide-in-from-bottom-2 duration-300"&gt;
-                &lt;div class="bg-gray-100 text-gray-800 p-3 rounded-2xl rounded-tl-none max-w-[80%] shadow-sm border border-gray-200"&gt;
-                    ${aiResponse}
-                &lt;/div&gt;
-            &lt;/div&gt;
+            <div class="flex justify-start mb-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                <div class="bg-gray-100 text-gray-800 p-3 rounded-2xl rounded-tl-none max-w-[80%] shadow-sm border border-gray-200">
+                    ${aiText}
+                </div>
+            </div>
         `;
 
-        // HTMX akan menggabungkan userBubble dan aiBubble ke dalam chat area
+        // Kirim gabungan pesan user dan AI ke HTMX
         res.send(userBubble + aiBubble);
     } catch (error) {
         console.error(error);
-        res.send(userBubble + '&lt;div class="text-red-500"&gt;Maaf, terjadi kesalahan koneksi ke AI.&lt;/div&gt;');
+        res.send(userBubble + '<div class="text-red-500 p-2 text-xs">Maaf, terjadi kesalahan koneksi ke AI.</div>');
     }
 });
 
